@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>City Ambient — Webamp</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #1a1a2e;
+      overflow: hidden;
+    }
+    #app {
+      width: 100%; height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script type="module">
+    import Webamp from "https://unpkg.com/webamp@^2";
+
+    // Инициализация Telegram WebApp
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+
+    function track(title, filename) {
+      return {
+        metaData: { artist: 'Кристина Дзейтова', title },
+        url: encodeTrack(filename),
+      };
+    }
+
+    function encodeTrack(filename) {
+      const base = window.location.href.replace(/\/[^/]*$/, '');
+      return base + '/музыка/' + encodeURIComponent(filename);
+    }
+
+    const webamp = new Webamp({
+      initialSkin: { url: './ColdGlass.wsz' },
+      initialTracks: [
+        track('Воспоминания',                            'Кристина Дзейтова - Воспоминания.mp3'),
+        track('Голоса звёзд',                            'Кристина Дзейтова - Голоса звёзд.mp3'),
+        track('Письмо',                                  'Кристина Дзейтова - Письмо.mp3'),
+        track('Сновидения',                              'Кристина Дзейтова - Сновидения.mp3'),
+        track('Вечерний ручей (feat. Ксения Саврасова)', 'Кристина_Дзейтова_feat_Ксения_Саврасова_Вечерний_ручей.mp3'),
+        track('Вальс тающей снежинки',                   'Кристина_Дзейтова_Вальс_тающей_снежинки.mp3'),
+        track('Вечерний ручей',                          'Кристина_Дзейтова_Вечерний_ручей.mp3'),
+        track('Горные светлячки',                        'Кристина_Дзейтова_Горные_светлячки.mp3'),
+        track('Земля одиноких',                          'Кристина_Дзейтова_Земля_одиноких.mp3'),
+        track('Корабль в океане',                        'Кристина_Дзейтова_Корабль_в_океане.mp3'),
+        track('Мерцающие звезды',                        'Кристина_Дзейтова_Мерцающие_звезды.mp3'),
+        track('Сны вселенной',                           'Кристина_Дзейтова_Сны_вселенной.mp3'),
+        track('Там, где поют деревья',                   'Кристина_Дзейтова_Там,_где_поют_деревья.mp3'),
+        track('Туман на рассвете',                       'Кристина_Дзейтова_Туман_на_рассвете.mp3'),
+        track('Улетают птицы',                           'Кристина_Дзейтова_Улетают_птицы.mp3'),
+      ],
+    });
+
+    webamp.renderWhenReady(document.getElementById('app'));
+  </script>
+</body>
+</html>
