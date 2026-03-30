@@ -1,8 +1,0 @@
-{"sessionId":"9f855c","location":"canvas-manager.js:sizeInput:keydown","message":"Enter pressed","data":{"value":"25"},"timestamp":1773094806908,"hypothesisId":"A"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize","message":"entry","data":{"sizeVal":"25","size":25,"savedSelectionNull":false},"timestamp":1773094806908,"hypothesisId":"A"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize:setTimeout","message":"before insert","data":{"rangeCount":1,"txt":"ну и блять"},"timestamp":1773094806918,"hypothesisId":"B"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize:afterInsert","message":"insert done","data":{"size":25,"htmlLen":95},"timestamp":1773094806920,"hypothesisId":"D"}
-{"sessionId":"9f855c","location":"canvas-manager.js:sizeInput:keydown","message":"Enter pressed","data":{"value":"45"},"timestamp":1773094815726,"hypothesisId":"A"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize","message":"entry","data":{"sizeVal":"45","size":45,"savedSelectionNull":false},"timestamp":1773094815726,"hypothesisId":"A"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize:setTimeout","message":"before insert","data":{"rangeCount":1,"txt":"ну и блять"},"timestamp":1773094815734,"hypothesisId":"B"}
-{"sessionId":"9f855c","location":"canvas-manager.js:applyFontSize:afterInsert","message":"insert done","data":{"size":45,"htmlLen":95},"timestamp":1773094815736,"hypothesisId":"D"}
