@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; media-src 'self' blob:;">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>City Ambient — AeroOS Player</title>
+  <link rel="stylesheet" href="player.css">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <!-- Видео-фон (заглушка для будущего пиксельного города) -->
+  <video id="bgVideo" class="bg-video" autoplay muted loop playsinline></video>
+  <div class="bg-overlay"></div>
+
+  <div class="winamp-container">
+    
+    <!-- ===== MAIN PLAYER WINDOW ===== -->
+    <div class="winamp-main">
+      <!-- Title Bar -->
+      <div class="title-bar">
+        <span class="title-text">CITY AMBIENT</span>
+        <div class="title-buttons">
+          <button class="title-btn title-btn-minimize" id="minimizeBtn" title="Minimize">_</button>
+        </div>
+      </div>
+
+      <!-- Display (LED дисплей) -->
+      <div class="display">
+        <div class="display-left">
+          <div class="time-display">
+            <span class="time-minutes" id="timeMinutes">00</span>
+            <span class="time-sep">:</span>
+            <span class="time-seconds" id="timeSeconds">00</span>
+          </div>
+        </div>
+        <div class="display-right">
+          <div class="track-info">
+            <div class="track-marquee" id="trackMarquee">
+              <span id="trackTitle">No track loaded</span>
+            </div>
+          </div>
+          <div class="track-meta">
+            <span class="meta-item" id="metaKbps">---</span>
+            <span class="meta-label">KBPS</span>
+            <span class="meta-item" id="metaKhz">--</span>
+            <span class="meta-label">KHZ</span>
+            <span class="meta-stereo" id="metaStereo">STEREO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seek Bar (прогресс трека) -->
+      <div class="seek-bar-container">
+        <div class="seek-bar" id="seekBar">
+          <div class="seek-fill" id="seekFill"></div>
+          <div class="seek-thumb" id="seekThumb"></div>
+        </div>
+      </div>
+
+      <!-- Volume + Balance -->
+      <div class="volume-row">
+        <span class="volume-label">VOL</span>
+        <div class="volume-bar" id="volumeBar">
+          <div class="volume-fill" id="volumeFill" style="width: 75%"></div>
+          <div class="volume-thumb" id="volumeThumb" style="left: 75%"></div>
+        </div>
+      </div>
+
+      <!-- Transport Controls -->
+      <div class="controls">
+        <button class="ctrl-btn" id="prevBtn" title="Previous">⏮</button>
+        <button class="ctrl-btn" id="rewindBtn" title="Rewind">⏪</button>
+        <button class="ctrl-btn ctrl-btn-play" id="playBtn" title="Play">▶</button>
+        <button class="ctrl-btn" id="pauseBtn" title="Pause">⏸</button>
+        <button class="ctrl-btn" id="stopBtn" title="Stop">⏹</button>
+        <button class="ctrl-btn" id="forwardBtn" title="Forward">⏩</button>
+        <button class="ctrl-btn" id="nextBtn" title="Next">⏭</button>
+      </div>
+
+      <!-- Shuffle / Repeat -->
+      <div class="extra-controls">
+        <button class="toggle-btn" id="shuffleBtn" title="Shuffle">🔀</button>
+        <button class="toggle-btn" id="repeatBtn" title="Repeat">🔁</button>
+      </div>
+    </div>
+
+    <!-- ===== PLAYLIST WINDOW ===== -->
+    <div class="winamp-playlist">
+      <div class="playlist-header">
+        <span class="playlist-title">PLAYLIST</span>
+        <span class="playlist-count" id="playlistCount">0 tracks</span>
+      </div>
+      <div class="playlist-body" id="playlistBody">
+        <!-- Треки заполняются динамически из JS -->
+      </div>
+      <div class="playlist-footer">
+        <div class="playlist-total">
+          <span id="playlistTotalTime">0:00</span> / <span id="playlistTotalTracks">0</span> tracks
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <audio id="audioPlayer" preload="auto"></audio>
+  <script src="player.js"></script>
+</body>
+</html>

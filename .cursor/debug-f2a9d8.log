@@ -1,0 +1,55 @@
+{"sessionId":"f2a9d8","location":"app.js:5780","message":"DOMContentLoaded fired, scheduling PlannerApp.init","data":{},"timestamp":1772745707318,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5783","message":"PlannerApp.init executing","data":{"canvasExists":true},"timestamp":1772745707823,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:1593","message":"refreshSection called","data":{"sectionName":"habits"},"timestamp":1772745714445,"hypothesisId":"C,E"}
+{"sessionId":"f2a9d8","location":"app.js:1593","message":"refreshSection called","data":{"sectionName":"daily"},"timestamp":1772745714926,"hypothesisId":"C,E"}
+{"sessionId":"f2a9d8","location":"app.js:1599","message":"daily case triggered","data":{},"timestamp":1772745714927,"hypothesisId":"C,E"}
+{"sessionId":"f2a9d8","location":"app.js:2005","message":"updateDailyPlanner called","data":{},"timestamp":1772745714927,"hypothesisId":"B,E"}
+{"sessionId":"f2a9d8","location":"app.js:2020","message":"updateTasksTable called","data":{},"timestamp":1772745714928,"hypothesisId":"A,E"}
+{"sessionId":"f2a9d8","location":"app.js:2024","message":"tbody element lookup","data":{"found":false,"element":"null"},"timestamp":1772745714929,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5780","message":"DOMContentLoaded fired, scheduling PlannerApp.init","data":{},"timestamp":1772745721276,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5783","message":"PlannerApp.init executing","data":{"canvasExists":true},"timestamp":1772745721778,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:1593","message":"refreshSection called","data":{"sectionName":"daily"},"timestamp":1772745723755,"hypothesisId":"C,E"}
+{"sessionId":"f2a9d8","location":"app.js:1599","message":"daily case triggered","data":{},"timestamp":1772745723755,"hypothesisId":"C,E"}
+{"sessionId":"f2a9d8","location":"app.js:2005","message":"updateDailyPlanner called","data":{},"timestamp":1772745723755,"hypothesisId":"B,E"}
+{"sessionId":"f2a9d8","location":"app.js:2020","message":"updateTasksTable called","data":{},"timestamp":1772745723757,"hypothesisId":"A,E"}
+{"sessionId":"f2a9d8","location":"app.js:2024","message":"tbody element lookup","data":{"found":false,"element":"null"},"timestamp":1772745723757,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5780","message":"DOMContentLoaded fired, scheduling PlannerApp.init","data":{},"timestamp":1772745791105,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5783","message":"PlannerApp.init executing","data":{"canvasExists":true},"timestamp":1772745791607,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5780","message":"DOMContentLoaded fired, scheduling PlannerApp.init","data":{},"timestamp":1772745808799,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5783","message":"PlannerApp.init executing","data":{"canvasExists":true},"timestamp":1772745809301,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:1593","message":"refreshSection called","data":{"sectionName":"daily"},"timestamp":1772745810315,"hypothesisId":"C,E","runId":"post-fix"}
+{"sessionId":"f2a9d8","location":"app.js:1599","message":"daily case - skipping old updateDailyPlanner","data":{},"timestamp":1772745810315,"hypothesisId":"FIX","runId":"post-fix"}
+{"sessionId":"f2a9d8","location":"app.js:5780","message":"DOMContentLoaded fired, scheduling PlannerApp.init","data":{},"timestamp":1772745817281,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:5783","message":"PlannerApp.init executing","data":{"canvasExists":true},"timestamp":1772745817784,"hypothesisId":"D"}
+{"sessionId":"f2a9d8","location":"app.js:1593","message":"refreshSection called","data":{"sectionName":"daily"},"timestamp":1772745818008,"hypothesisId":"C,E","runId":"post-fix"}
+{"sessionId":"f2a9d8","location":"app.js:1599","message":"daily case - skipping old updateDailyPlanner","data":{},"timestamp":1772745818009,"hypothesisId":"FIX","runId":"post-fix"}
+{"sessionId":"f2a9d8","location":"app.js:5345","message":"setupEventListeners - delete button","data":{"found":true},"timestamp":1772746432576,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5345","message":"setupEventListeners - delete button","data":{"found":true},"timestamp":1772746452082,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746453561,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746453561,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746453938,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746453938,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746454173,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746454173,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746454390,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746454390,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746458334,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746458334,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746458547,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746458547,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746458784,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":false},"timestamp":1772746458784,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":4},"timestamp":1772746463344,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746464297,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":true,"selectedStickerId":4},"timestamp":1772746464297,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":1},"timestamp":1772746466616,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746467600,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":true,"selectedStickerId":1},"timestamp":1772746467600,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":5},"timestamp":1772746468197,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746469061,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":true,"selectedStickerId":5},"timestamp":1772746469061,"hypothesisId":"A"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":6},"timestamp":1772746469992,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":6},"timestamp":1772746471438,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5534","message":"selectSticker called","data":{"stickerId":6},"timestamp":1772746472087,"hypothesisId":"B"}
+{"sessionId":"f2a9d8","location":"app.js:5349","message":"delete button clicked","data":{},"timestamp":1772746473152,"hypothesisId":"C"}
+{"sessionId":"f2a9d8","location":"app.js:5546","message":"deleteSelected called","data":{"hasSelectedSticker":true,"selectedStickerId":6},"timestamp":1772746473153,"hypothesisId":"A"}
