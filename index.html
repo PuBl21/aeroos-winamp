@@ -2,10 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>City Ambient — Webamp</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
+    :root {
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
@@ -13,6 +17,7 @@
       height: 100%;
       background: #1a1a2e;
       overflow: hidden;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     #app {
@@ -69,18 +74,30 @@
 
     // Размеры окон Webamp с кожей ColdGlass
     const W = 275, H = 116;
-    const gap = 0; // окна вплотную
+    const TOTAL_W = W * 3; // 825px
 
     const sw = window.innerWidth;
     const sh = window.innerHeight;
-    const totalW = W * 3 + gap * 2;
-    const startX = Math.max(0, Math.floor((sw - totalW) / 2));
-    const startY = sh - H - 4; // 4px отступ от низа
+
+    // Safe area bottom — читаем CSS-переменную --sab (env(safe-area-inset-bottom))
+    const safeAreaBottom = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue('--sab') || '0'
+    ) || 0;
+
+    // Масштаб: если экран уже 825px — уменьшаем пропорционально
+    const scale = sw < TOTAL_W ? sw / TOTAL_W : 1;
+
+    // При scale < 1 визуальная высота окна меньше, корректируем Y
+    const scaledH = Math.round(H * scale);
+    const startY = sh - scaledH - safeAreaBottom - 4;
+
+    // При scale < 1 начинаем с 0 (окна займут всю ширину после масштабирования)
+    const startX = scale < 1 ? 0 : Math.max(0, Math.floor((sw - TOTAL_W) / 2));
 
     const layout = {
-      main:      { position: { x: startX + W + gap,         y: startY } },
-      equalizer: { position: { x: startX,                   y: startY } },
-      playlist:  { position: { x: startX + W * 2 + gap * 2, y: startY }, size: [0, 0] },
+      main:      { position: { x: startX + W,     y: startY } },
+      equalizer: { position: { x: startX,          y: startY } },
+      playlist:  { position: { x: startX + W * 2, y: startY }, size: [0, 0] },
     };
 
     const webamp = new Webamp({
@@ -107,26 +124,32 @@
 
     // Принудительно двигаем обёртки окон после рендеринга
     // windowLayout игнорируется Webamp при ensureWindowsAreOnScreen,
-    // поэтому применяем позиции напрямую через transform на wrapper-элементах
+    // поэтому применяем позиции напрямую через transform на wrapper-элементах.
+    // При scale < 1 (узкий экран, все iPhone) добавляем scale(scale) с transform-origin: top left.
     function applyLayout() {
       const positions = {
-        'main-window':       { x: startX + W,       y: startY },
-        'equalizer-window':  { x: startX,            y: startY },
-        'playlist-window':   { x: startX + W * 2,   y: startY },
+        'main-window':      { x: startX + W,     y: startY },
+        'equalizer-window': { x: startX,          y: startY },
+        'playlist-window':  { x: startX + W * 2, y: startY },
       };
       for (const [id, pos] of Object.entries(positions)) {
         const el = document.getElementById(id);
         if (!el) continue;
         // Ищем обёртку с ненулевым transform или берём parentElement
         let wrapper = el.parentElement;
-        // Идём выше если у прямого родителя нет позиции (playlist вложен глубже)
         let node = el.parentElement;
         while (node && node.id !== 'webamp') {
           const m = new DOMMatrix(getComputedStyle(node).transform);
           if (m.m41 !== 0 || m.m42 !== 0) { wrapper = node; break; }
           node = node.parentElement;
         }
-        wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px)`, 'important');
+        if (scale < 1) {
+          wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, 'important');
+          wrapper.style.setProperty('transform-origin', 'top left', 'important');
+        } else {
+          wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px)`, 'important');
+          wrapper.style.removeProperty('transform-origin');
+        }
       }
     }
 
