@@ -7,26 +7,116 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     html, body {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background: #1a1a2e;
       overflow: hidden;
     }
+
     #app {
-      width: 100%; height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background: #1a1a2e;
+    }
+
+    /*
+      Webamp рендерит окна с position:absolute и задаёт top/left сам.
+      Мы перехватываем все его окна и прибиваем их к низу через CSS.
+      #webamp — корневой div, который Webamp создаёт внутри #app.
+    */
+    #webamp {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Все три окна Webamp: main, equalizer, playlist */
+    #webamp #main-window,
+    #webamp #equalizer-window,
+    #webamp #playlist-window {
+      position: absolute !important;
     }
   </style>
 </head>
 <body>
   <div id="app"></div>
 
+  <button id="show-pos-btn" onclick="showPositions()" style="
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: rgba(255,200,0,0.9);
+    color: #000;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: monospace;
+  ">📐 Показать координаты</button>
+
+  <pre id="pos-display" style="
+    display: none;
+    position: fixed;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: rgba(0,0,0,0.85);
+    color: #0f0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: monospace;
+    white-space: pre;
+    pointer-events: none;
+  "></pre>
+
+  <script>
+    function showPositions() {
+      const ids = ['main-window', 'equalizer-window', 'playlist-window'];
+      const lines = ids.map(id => {
+        const el = document.getElementById(id);
+        if (!el) return id + ': не найден';
+
+        // Webamp хранит координаты на родительском div через transform: translate(x, y)
+        // Ищем ближайшего предка у которого transform != none (не identity matrix)
+        function findPositionedAncestor(el) {
+          let node = el.parentElement;
+          while (node && node.id !== 'webamp') {
+            const m = new DOMMatrix(getComputedStyle(node).transform);
+            if (m.m41 !== 0 || m.m42 !== 0) return node;
+            node = node.parentElement;
+          }
+          return el.parentElement;
+        }
+
+        const wrapper = findPositionedAncestor(el);
+        const matrix = new DOMMatrix(getComputedStyle(wrapper).transform);
+        const x = Math.round(matrix.m41);
+        const y = Math.round(matrix.m42);
+
+        return `${id}:\n  x=${x}, y=${y}`;
+      });
+
+      const box = document.getElementById('pos-display');
+      box.textContent = lines.join('\n\n');
+      box.style.display = 'block';
+      setTimeout(() => { box.style.display = 'none'; }, 15000);
+    }
+  </script>
+
   <script type="module">
     import Webamp from "https://unpkg.com/webamp@^2";
 
-    // Инициализация Telegram WebApp
     if (window.Telegram?.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
@@ -43,6 +133,22 @@
       const base = window.location.href.replace(/\/[^/]*$/, '');
       return base + '/музыка/' + encodeURIComponent(filename);
     }
+
+    // Размеры окон Webamp с кожей ColdGlass
+    const W = 275, H = 116;
+    const gap = 0; // окна вплотную
+
+    const sw = window.innerWidth;
+    const sh = window.innerHeight;
+    const totalW = W * 3 + gap * 2;
+    const startX = Math.max(0, Math.floor((sw - totalW) / 2));
+    const startY = sh - H - 4; // 4px отступ от низа
+
+    const layout = {
+      main:      { position: { x: startX + W + gap,         y: startY } },
+      equalizer: { position: { x: startX,                   y: startY } },
+      playlist:  { position: { x: startX + W * 2 + gap * 2, y: startY }, size: [0, 0] },
+    };
 
     const webamp = new Webamp({
       initialSkin: { url: './ColdGlass.wsz' },
@@ -63,9 +169,42 @@
         track('Туман на рассвете',                       'Кристина_Дзейтова_Туман_на_рассвете.mp3'),
         track('Улетают птицы',                           'Кристина_Дзейтова_Улетают_птицы.mp3'),
       ],
+      windowLayout: layout,
     });
 
-    webamp.renderWhenReady(document.getElementById('app'));
+    // Принудительно двигаем обёртки окон после рендеринга
+    // windowLayout игнорируется Webamp при ensureWindowsAreOnScreen,
+    // поэтому применяем позиции напрямую через transform на wrapper-элементах
+    function applyLayout() {
+      const positions = {
+        'main-window':       { x: startX + W,       y: startY },
+        'equalizer-window':  { x: startX,            y: startY },
+        'playlist-window':   { x: startX + W * 2,   y: startY },
+      };
+      for (const [id, pos] of Object.entries(positions)) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        // Ищем обёртку с ненулевым transform или берём parentElement
+        let wrapper = el.parentElement;
+        // Идём выше если у прямого родителя нет позиции (playlist вложен глубже)
+        let node = el.parentElement;
+        while (node && node.id !== 'webamp') {
+          const m = new DOMMatrix(getComputedStyle(node).transform);
+          if (m.m41 !== 0 || m.m42 !== 0) { wrapper = node; break; }
+          node = node.parentElement;
+        }
+        wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px)`, 'important');
+      }
+    }
+
+    webamp.renderWhenReady(document.getElementById('app')).then(() => {
+      // Применяем сразу и ещё раз через 300ms — Webamp может переставить после рендера
+      applyLayout();
+      setTimeout(applyLayout, 100);
+      setTimeout(applyLayout, 300);
+      setTimeout(applyLayout, 600);
+      document.getElementById('show-pos-btn').style.display = 'block';
+    });
   </script>
 </body>
 </html>
