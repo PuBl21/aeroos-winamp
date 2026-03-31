@@ -6,10 +6,6 @@
   <title>City Ambient — Webamp</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --sab: env(safe-area-inset-bottom, 0px);
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
@@ -17,7 +13,6 @@
       height: 100%;
       background: #1a1a2e;
       overflow: hidden;
-      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     #app {
@@ -72,35 +67,24 @@
       return base + '/музыка/' + encodeURIComponent(filename);
     }
 
-    // Размеры окон Webamp с кожей ColdGlass
+    const isMobile = window.innerWidth < 826;
     const W = 275, H = 116;
-    const TOTAL_W = W * 3; // 825px
 
-    const sw = window.innerWidth;
-    const sh = window.innerHeight;
+    const pcLayout = (() => {
+      if (isMobile) return undefined;
+      const sw = window.innerWidth;
+      const sh = window.innerHeight;
+      const TOTAL_W = W * 3;
+      const startX = Math.max(0, Math.floor((sw - TOTAL_W) / 2));
+      const startY = sh - H - 4;
+      return {
+        main:      { position: { x: startX + W,     y: startY } },
+        equalizer: { position: { x: startX,          y: startY } },
+        playlist:  { position: { x: startX + W * 2, y: startY }, size: [0, 0] },
+      };
+    })();
 
-    // Safe area bottom — читаем CSS-переменную --sab (env(safe-area-inset-bottom))
-    const safeAreaBottom = parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue('--sab') || '0'
-    ) || 0;
-
-    // Масштаб: если экран уже 825px — уменьшаем пропорционально
-    const scale = sw < TOTAL_W ? sw / TOTAL_W : 1;
-
-    // При scale < 1 визуальная высота окна меньше, корректируем Y
-    const scaledH = Math.round(H * scale);
-    const startY = sh - scaledH - safeAreaBottom - 4;
-
-    // При scale < 1 начинаем с 0 (окна займут всю ширину после масштабирования)
-    const startX = scale < 1 ? 0 : Math.max(0, Math.floor((sw - TOTAL_W) / 2));
-
-    const layout = {
-      main:      { position: { x: startX + W,     y: startY } },
-      equalizer: { position: { x: startX,          y: startY } },
-      playlist:  { position: { x: startX + W * 2, y: startY }, size: [0, 0] },
-    };
-
-    const webamp = new Webamp({
+    const webampOptions = {
       initialSkin: { url: './ColdGlass.wsz' },
       initialTracks: [
         track('Воспоминания',                            'Кристина Дзейтова - Воспоминания.mp3'),
@@ -119,14 +103,18 @@
         track('Туман на рассвете',                       'Кристина_Дзейтова_Туман_на_рассвете.mp3'),
         track('Улетают птицы',                           'Кристина_Дзейтова_Улетают_птицы.mp3'),
       ],
-      windowLayout: layout,
-    });
+    };
+    if (pcLayout) webampOptions.windowLayout = pcLayout;
 
-    // Принудительно двигаем обёртки окон после рендеринга
-    // windowLayout игнорируется Webamp при ensureWindowsAreOnScreen,
-    // поэтому применяем позиции напрямую через transform на wrapper-элементах.
-    // При scale < 1 (узкий экран, все iPhone) добавляем scale(scale) с transform-origin: top left.
-    function applyLayout() {
+    const webamp = new Webamp(webampOptions);
+
+    function applyPcLayout() {
+      if (isMobile) return;
+      const sw = window.innerWidth;
+      const sh = window.innerHeight;
+      const TOTAL_W = W * 3;
+      const startX = Math.max(0, Math.floor((sw - TOTAL_W) / 2));
+      const startY = sh - H - 4;
       const positions = {
         'main-window':      { x: startX + W,     y: startY },
         'equalizer-window': { x: startX,          y: startY },
@@ -135,7 +123,6 @@
       for (const [id, pos] of Object.entries(positions)) {
         const el = document.getElementById(id);
         if (!el) continue;
-        // Ищем обёртку с ненулевым transform или берём parentElement
         let wrapper = el.parentElement;
         let node = el.parentElement;
         while (node && node.id !== 'webamp') {
@@ -143,21 +130,40 @@
           if (m.m41 !== 0 || m.m42 !== 0) { wrapper = node; break; }
           node = node.parentElement;
         }
-        if (scale < 1) {
-          wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, 'important');
-          wrapper.style.setProperty('transform-origin', 'top left', 'important');
-        } else {
-          wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px)`, 'important');
-          wrapper.style.removeProperty('transform-origin');
-        }
+        wrapper.style.setProperty('transform', `translate(${pos.x}px, ${pos.y}px)`, 'important');
       }
     }
 
+    function lockDragging() {
+      document.querySelectorAll('#webamp .draggable').forEach(el => {
+        el.classList.remove('draggable');
+      });
+    }
+
     webamp.renderWhenReady(document.getElementById('app')).then(() => {
-      applyLayout();
-      setTimeout(applyLayout, 100);
-      setTimeout(applyLayout, 300);
-      setTimeout(applyLayout, 600);
+      if (!isMobile) {
+        applyPcLayout();
+        setTimeout(applyPcLayout, 100);
+        setTimeout(applyPcLayout, 300);
+        setTimeout(applyPcLayout, 600);
+      }
+
+      lockDragging();
+      const dragObserver = new MutationObserver(lockDragging);
+      dragObserver.observe(document.getElementById('webamp'), {
+        subtree: true,
+        childList: true,
+        attributeFilter: ['class'],
+      });
+
+      if (!isMobile) {
+        const posObserver = new MutationObserver(applyPcLayout);
+        posObserver.observe(document.getElementById('webamp'), {
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style'],
+        });
+      }
     });
   </script>
 </body>
