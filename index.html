@@ -46,73 +46,6 @@
 <body>
   <div id="app"></div>
 
-  <button id="show-pos-btn" onclick="showPositions()" style="
-    display: none;
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    background: rgba(255,200,0,0.9);
-    color: #000;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-    font-family: monospace;
-  ">📐 Показать координаты</button>
-
-  <pre id="pos-display" style="
-    display: none;
-    position: fixed;
-    top: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    background: rgba(0,0,0,0.85);
-    color: #0f0;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: monospace;
-    white-space: pre;
-    pointer-events: none;
-  "></pre>
-
-  <script>
-    function showPositions() {
-      const ids = ['main-window', 'equalizer-window', 'playlist-window'];
-      const lines = ids.map(id => {
-        const el = document.getElementById(id);
-        if (!el) return id + ': не найден';
-
-        // Webamp хранит координаты на родительском div через transform: translate(x, y)
-        // Ищем ближайшего предка у которого transform != none (не identity matrix)
-        function findPositionedAncestor(el) {
-          let node = el.parentElement;
-          while (node && node.id !== 'webamp') {
-            const m = new DOMMatrix(getComputedStyle(node).transform);
-            if (m.m41 !== 0 || m.m42 !== 0) return node;
-            node = node.parentElement;
-          }
-          return el.parentElement;
-        }
-
-        const wrapper = findPositionedAncestor(el);
-        const matrix = new DOMMatrix(getComputedStyle(wrapper).transform);
-        const x = Math.round(matrix.m41);
-        const y = Math.round(matrix.m42);
-
-        return `${id}:\n  x=${x}, y=${y}`;
-      });
-
-      const box = document.getElementById('pos-display');
-      box.textContent = lines.join('\n\n');
-      box.style.display = 'block';
-      setTimeout(() => { box.style.display = 'none'; }, 15000);
-    }
-  </script>
 
   <script type="module">
     import Webamp from "https://unpkg.com/webamp@^2";
@@ -198,12 +131,10 @@
     }
 
     webamp.renderWhenReady(document.getElementById('app')).then(() => {
-      // Применяем сразу и ещё раз через 300ms — Webamp может переставить после рендера
       applyLayout();
       setTimeout(applyLayout, 100);
       setTimeout(applyLayout, 300);
       setTimeout(applyLayout, 600);
-      document.getElementById('show-pos-btn').style.display = 'block';
     });
   </script>
 </body>
